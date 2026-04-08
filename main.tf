@@ -98,6 +98,7 @@ resource "cloudflare_dns_record" "ardathon_server_v4" {
   type    = "A"
   proxied = false
   ttl     = 1
+  comment = "Managed by Terraform"
 }
 
 resource "cloudflare_dns_record" "ardathon_server_v6" {
@@ -109,6 +110,7 @@ resource "cloudflare_dns_record" "ardathon_server_v6" {
   type    = "AAAA"
   proxied = false
   ttl     = 1
+  comment = "Managed by Terraform"
 }
 
 # -----------------------------------------------
