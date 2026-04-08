@@ -27,12 +27,6 @@ resource "vultr_firewall_group" "firewallgroup" {
   description = var.label
 }
 
-# TODO: Refactor to use dynamic blocks and for_each to avoid code duplication
-# TODO: Add ports to variables to make it more flexible
-# TODO: Create a map of firewall rules in variables and loop through them to create resources
-# NOTE: Call this map "firewall_group_rules"
-
-
 resource "vultr_firewall_rule" "rule_v4" {
   for_each = var.firewall_group_rules
 
@@ -61,7 +55,7 @@ resource "vultr_firewall_rule" "rule_v6" {
 # Create Server Instance
 # -----------------------------------------------
 
-resource "vultr_instance" "vpn_instance" {
+resource "vultr_instance" "server_instance" {
   for_each = var.servers
 
   region = each.value.region
@@ -83,24 +77,24 @@ resource "vultr_instance" "vpn_instance" {
 # Create Cloudflare Name Server Entries
 # -----------------------------------------------
 
-resource "cloudflare_dns_record" "ardathon_server_v4" {
+resource "cloudflare_dns_record" "dns_record_v4" {
   for_each = var.servers
 
   zone_id = data.cloudflare_zone.domain.zone_id
   name    = "${each.key}.${var.subdomain}"
-  content = vultr_instance.vpn_instance[each.key].main_ip
+  content = vultr_instance.server_instance[each.key].main_ip
   type    = "A"
   proxied = false
   ttl     = 1
   comment = "Managed by Terraform"
 }
 
-resource "cloudflare_dns_record" "ardathon_server_v6" {
+resource "cloudflare_dns_record" "dns_record_v6" {
   for_each = var.servers
 
   zone_id = data.cloudflare_zone.domain.zone_id
   name    = "${each.key}.${var.subdomain}"
-  content = vultr_instance.vpn_instance[each.key].v6_main_ip
+  content = vultr_instance.server_instance[each.key].v6_main_ip
   type    = "AAAA"
   proxied = false
   ttl     = 1
@@ -114,7 +108,7 @@ resource "cloudflare_dns_record" "ardathon_server_v6" {
 resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/inventory.tpl", {
     instances = {
-      for name, instance in vultr_instance.vpn_instance : name => {
+      for name, instance in vultr_instance.server_instance : name => {
         hostname = instance.hostname
       }
     }
