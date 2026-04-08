@@ -69,3 +69,13 @@ variable "domain" {
   type        = string
 }
 
+# --------------------
+# Local  
+# --------------------
+
+variable "inventory_dir" {
+  description = "Directory where inventory.ini will be written. Defaults to the module directory."
+  type        = string
+  default     = ""
+}
+

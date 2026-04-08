@@ -125,5 +125,5 @@ resource "local_file" "ansible_inventory" {
       }
     }
   })
-  filename = "${path.module}/inventory.ini"
+  filename = "${var.inventory_dir != "" ? var.inventory_dir : path.module}/inventory.ini"
 }
