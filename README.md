@@ -43,24 +43,24 @@ This module allows you to easily create and manage **Vultr servers** while autom
 2. Initialize Terraform:
     
     ```bash
-    terraform init
+    tofu init
     ```
 
 3. Plan the deployment:
     ```bash
-    terraform plan -var-file="secrets.tfvars" -var-file="servers.tfvars"
+    tofu plan -var-file="secrets.tfvars" -var-file="servers.tfvars"
     ```
 
 4. Apply the deployment:
     ```bash
-    terraform apply -var-file="secrets.tfvars" -var-file="servers.tfvars" 
+    tofu apply -var-file="secrets.tfvars" -var-file="servers.tfvars" 
     ```
 
 5. After the deployment is complete, you can find the generated Ansible inventory file at `inventory.ini`.
 
 6. To destroy the infrastructure when you no longer need it:
     ```bash
-    terraform destroy -var-file="secrets.tfvars" -var-file="servers.tfvars"
+    tofu destroy -var-file="secrets.tfvars" -var-file="servers.tfvars"
     ```
 
 ### As a Standalone Project
@@ -124,28 +124,29 @@ This module allows you to easily create and manage **Vultr servers** while autom
 6. Initialize Terraform:
     
     ```bash
-    terraform init
+    tofu init
     ```
 
 7. Plan the deployment:
     ```bash
-    terraform plan -var-file="secrets.tfvars" -var-file="servers.tfvars"
+    tofu plan -var-file="secrets.tfvars" -var-file="servers.tfvars"
     ```
 
 8. Apply the deployment:
     ```bash
-    terraform apply -var-file="secrets.tfvars" -var-file="servers.tfvars" 
+    tofu apply -var-file="secrets.tfvars" -var-file="servers.tfvars" 
     ```
 
 9. After the deployment is complete, you can find the generated Ansible inventory file at `inventory.ini`.
 
 10. To destroy the infrastructure when you no longer need it:
     ```bash
-    terraform destroy -var-file="secrets.tfvars" -var-file="servers.tfvars"
+    tofu destroy -var-file="secrets.tfvars" -var-file="servers.tfvars"
     ```
 
 ## Notes
 
+- **The shell command uses `tofu` from OpenTofu, which is a replacement for Terraform. You can replace `tofu` with `terraform` if you prefer to use Terraform directly.**
 - Ensure that you have the necessary permissions and API keys for both Vultr and Cloudflare.
 - The `servers.tfvars` file allows you to easily configure the server settings, such as region, plan, SSH key, OS, and domain information.
 - The generated Ansible inventory file can be used to manage the deployed servers with Ansible for further configuration and automation.
