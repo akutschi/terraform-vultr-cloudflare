@@ -75,7 +75,18 @@ This module allows you to easily create and manage **Vultr servers** while autom
     cd terraform-vultr-cloudflare-instance
     ```
 
-3. Create a `secrets.tfvars` file in the project root and add your Vultr API key and Cloudflare API token. Instead using the Cloudflare API token the Cloudflare API key and the email can be used, but the API token is recommended for better security and granular permissions:
+3. Add provider to the `main.tf` file:
+   ```hcl
+    provider "vultr" {
+    api_key = var.vultr_api_key
+    }
+
+    provider "cloudflare" {
+    api_token = var.cloudflare_api_token
+    }
+    ```
+
+4. Create a `secrets.tfvars` file in the project root and add your Vultr API key and Cloudflare API token. Instead using the Cloudflare API token the Cloudflare API key and the email can be used, but the API token is recommended for better security and granular permissions:
     ```hcl
     vultr_api_key = "your_vultr_api_key"
 
@@ -86,7 +97,7 @@ This module allows you to easily create and manage **Vultr servers** while autom
 
 > Important: Comment out what you are not using. Make sure to replace the placeholder values with your actual API keys and tokens.
 
-4. Create a `servers.tfvars` file in the project root and define your server configurations:
+5. Create a `servers.tfvars` file in the project root and define your server configurations:
     ```hcl
     # ====================
     # Servers
@@ -110,25 +121,25 @@ This module allows you to easily create and manage **Vultr servers** while autom
 
 >  Keep `secrets.tfvars` and `servers.tfvars` secure and do not commit them to version control.
 
-4. Initialize Terraform:
+6. Initialize Terraform:
     
     ```bash
     terraform init
     ```
 
-5. Plan the deployment:
+7. Plan the deployment:
     ```bash
     terraform plan -var-file="secrets.tfvars" -var-file="servers.tfvars"
     ```
 
-6. Apply the deployment:
+8. Apply the deployment:
     ```bash
     terraform apply -var-file="secrets.tfvars" -var-file="servers.tfvars" 
     ```
 
-7. After the deployment is complete, you can find the generated Ansible inventory file at `inventory.ini`.
+9. After the deployment is complete, you can find the generated Ansible inventory file at `inventory.ini`.
 
-8. To destroy the infrastructure when you no longer need it:
+10. To destroy the infrastructure when you no longer need it:
     ```bash
     terraform destroy -var-file="secrets.tfvars" -var-file="servers.tfvars"
     ```
