@@ -89,6 +89,14 @@ This module allows you to easily create and manage **Vultr servers** while autom
     }
 
     # ====================
+    # Firewall Group Rules
+    # ====================
+
+    firewall_group_rules = {
+    ssh       = { protocol = "tcp", port = "22" }
+    }
+
+    # ====================
     # Settings
     # ====================
 
