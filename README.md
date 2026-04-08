@@ -40,28 +40,8 @@ This module allows you to easily create and manage **Vultr servers** while autom
     }
     ```
 
-2. Initialize Terraform:
-    
-    ```bash
-    tofu init
-    ```
+2. Go to the standalone project instructions and start at step 4 to create the `secrets.tfvars` and `servers.tfvars` files, initialize Terraform, and apply the configuration.
 
-3. Plan the deployment:
-    ```bash
-    tofu plan -var-file="secrets.tfvars" -var-file="servers.tfvars"
-    ```
-
-4. Apply the deployment:
-    ```bash
-    tofu apply -var-file="secrets.tfvars" -var-file="servers.tfvars" 
-    ```
-
-5. After the deployment is complete, you can find the generated Ansible inventory file at `inventory.ini`.
-
-6. To destroy the infrastructure when you no longer need it:
-    ```bash
-    tofu destroy -var-file="secrets.tfvars" -var-file="servers.tfvars"
-    ```
 
 ### As a Standalone Project
 
