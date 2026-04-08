@@ -26,6 +26,17 @@ variable "servers" {
   default = {}
 }
 
+variable "firewall_group_rules" {
+  description = "Map of firewall rules to create, keyed by rule name"
+  type = map(object({
+    protocol = string
+    port     = string
+  }))
+  default = {
+    ssh = { protocol = "tcp", port = "22" }
+  }
+}
+
 variable "os_name" {
   description = "Operating system name to use for all servers"
   type        = string

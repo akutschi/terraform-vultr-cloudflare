@@ -23,44 +23,38 @@ terraform {
 # Create Firewall Group and Rules
 # -----------------------------------------------
 
-resource "vultr_firewall_group" "vpn_firewallgroup" {
-  description = "wireguard firewall"
+resource "vultr_firewall_group" "firewallgroup" {
+  description = var.label
 }
 
-resource "vultr_firewall_rule" "ssh_v4" {
-  firewall_group_id = vultr_firewall_group.vpn_firewallgroup.id
-  protocol          = "tcp"
+# TODO: Refactor to use dynamic blocks and for_each to avoid code duplication
+# TODO: Add ports to variables to make it more flexible
+# TODO: Create a map of firewall rules in variables and loop through them to create resources
+# NOTE: Call this map "firewall_group_rules"
+
+
+resource "vultr_firewall_rule" "rule_v4" {
+  for_each = var.firewall_group_rules
+
+  firewall_group_id = vultr_firewall_group.firewallgroup.id
+  protocol          = each.value.protocol
   ip_type           = "v4"
   subnet            = "0.0.0.0"
   subnet_size       = 0
-  port              = "22"
+  port              = each.value.port
+
 }
 
-resource "vultr_firewall_rule" "ssh_v6" {
-  firewall_group_id = vultr_firewall_group.vpn_firewallgroup.id
-  protocol          = "tcp"
+resource "vultr_firewall_rule" "rule_v6" {
+  for_each = var.firewall_group_rules
+
+  firewall_group_id = vultr_firewall_group.firewallgroup.id
+  protocol          = each.value.protocol
   ip_type           = "v6"
   subnet            = "::"
   subnet_size       = 0
-  port              = "22"
-}
+  port              = each.value.port
 
-resource "vultr_firewall_rule" "wireguard_v4" {
-  firewall_group_id = vultr_firewall_group.vpn_firewallgroup.id
-  protocol          = "udp"
-  ip_type           = "v4"
-  subnet            = "0.0.0.0"
-  subnet_size       = 0
-  port              = "51820"
-}
-
-resource "vultr_firewall_rule" "wireguard_v6" {
-  firewall_group_id = vultr_firewall_group.vpn_firewallgroup.id
-  protocol          = "udp"
-  ip_type           = "v6"
-  subnet            = "::"
-  subnet_size       = 0
-  port              = "51820"
 }
 
 # -----------------------------------------------
@@ -82,7 +76,7 @@ resource "vultr_instance" "vpn_instance" {
   ssh_key_ids       = [data.vultr_ssh_key.ssh_key.id]
   label             = var.label
   tags              = ["terraform"]
-  firewall_group_id = vultr_firewall_group.vpn_firewallgroup.id
+  firewall_group_id = vultr_firewall_group.firewallgroup.id
 }
 
 # -----------------------------------------------
