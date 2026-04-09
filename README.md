@@ -1,4 +1,4 @@
-# Terraform Vultr Cloudflare Instance
+# Terraform Vultr Cloudflare
 
 This module allows you to easily create and manage **Vultr servers** while automatically updating your **Cloudflare DNS records**. It also generates an **Ansible inventory file** for the deployed servers, making it easier to manage them with Ansible.
 
