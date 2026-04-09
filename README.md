@@ -10,6 +10,27 @@ This module allows you to easily create and manage **Vultr servers** while autom
 
 1. Add the module and the required providers to your Terraform configuration:
    ```hcl
+    terraform {
+    required_providers {
+        vultr = {
+        source  = "vultr/vultr"
+        version = "~> 2"
+        }
+        cloudflare = {
+        source  = "cloudflare/cloudflare"
+        version = "~> 5"
+        }
+        local = {
+        source  = "hashicorp/local"
+        version = "~> 2"
+        }
+    }
+    }
+
+    # ===============================================
+    # Providers
+    # ===============================================
+
     provider "vultr" {
     api_key = var.vultr_api_key
     }
@@ -18,29 +39,31 @@ This module allows you to easily create and manage **Vultr servers** while autom
     api_token = var.cloudflare_api_token
     }
 
-    module "vultr_server" {
-    source = "github.com/akutschi/terraform-vultr-cloudflare-instance"
+    # ===============================================
+    # Module
+    # ===============================================
 
-    # Pass necessary variables here
-    vultr_api_key = var.vultr_api_key
+    module "wireguard_server" {
+    source = "github.com/akutschi/terraform-vultr-cloudflare?ref=v0.1.1"
+
+    vultr_api_key        = var.vultr_api_key
     cloudflare_api_token = var.cloudflare_api_token
-    #cloudflare_api_key = var.cloudflare_api_key
-    #cloudflare_email = var.cloudflare_email
-
-    servers = {
-    us = { region = "ewr", plan = "vhp-1c-1gb" }
-    # uk = { region = "lhr", plan = "vhp-1c-1gb" }
-    }
-
-    ssh_key_name = "your_vultr_key_name"
-    os_name = "Debian 13 x64 (trixie)"
-    subdomain = "subdomain"
-    domain = "tld.com"
-    label = "vultr server"
+    ssh_key_name         = var.ssh_key_name
+    os_name              = var.os_name
+    servers              = var.servers
+    firewall_group_rules = var.firewall_group_rules
+    domain               = var.domain
+    subdomain            = var.subdomain
+    label                = var.label
+    inventory_dir        = path.root
     }
     ```
 
-2. Go to the standalone project instructions and start at step 4 to create the `secrets.tfvars` and `servers.tfvars` files, initialize Terraform, and apply the configuration.
+> Reference to the correct version (here v0.1.1) of the module is important to ensure compatibility. You can check the available versions on the [GitHub repository](https://github.com/akutschi/terraform-vultr-cloudflare/releases).
+
+2. Copy over the variables.tf file from the module to your project. 
+
+3. Go to the standalone project instructions and start at step 4 to create the `secrets.tfvars` and `servers.tfvars` files, initialize Terraform, and apply the configuration.
 
 
 ### As a Standalone Project
@@ -75,7 +98,7 @@ This module allows you to easily create and manage **Vultr servers** while autom
     #cloudflare_email = "your_cloudflare_email"
     ``` 
 
-> Important: Comment out what you are not using. Make sure to replace the placeholder values with your actual API keys and tokens.
+> Important: Comment out what you are not using. Make sure to replace the placeholder values with your actual API keys and tokens. See notes for more details on using API keys vs API tokens for Cloudflare.
 
 5. Create a `servers.tfvars` file in the project root and define your server configurations:
     ```hcl
@@ -139,6 +162,7 @@ This module allows you to easily create and manage **Vultr servers** while autom
 - The `servers.tfvars` file allows you to easily configure the server settings, such as region, plan, SSH key, OS, and domain information.
 - The generated Ansible inventory file can be used to manage the deployed servers with Ansible for further configuration and automation.
 - Always **review the Terraform plan output before applying changes** to ensure that the expected resources will be created or modified.
+- If you want to use your Cloudflare API key and email instead of an API token, make sure to update the `main.tf` file accordingly and provide the necessary values in the `secrets.tfvars` file. However, using an API token with the least privileges necessary is recommended for better security.
 
 ## License
 
