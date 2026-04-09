@@ -1,7 +1,7 @@
-[vpn]
+[wireguard]
 %{ for _, instance in instances ~}
 ${instance.hostname}
 %{ endfor ~}
 
-[vpn:vars]
+[wireguard:vars]
 ansible_python_interpreter=/usr/bin/python3
