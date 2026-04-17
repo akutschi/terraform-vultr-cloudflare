@@ -36,7 +36,7 @@ resource "vultr_firewall_rule" "rule_v4" {
   subnet            = "0.0.0.0"
   subnet_size       = 0
   port              = each.value.port
-  source            = "0.0.0.0/0"
+  source            = ""
 }
 
 resource "vultr_firewall_rule" "rule_v6" {
@@ -48,7 +48,7 @@ resource "vultr_firewall_rule" "rule_v6" {
   subnet            = "::"
   subnet_size       = 0
   port              = each.value.port
-  source            = "::/0"
+  source            = ""
 }
 
 # -----------------------------------------------
