@@ -107,6 +107,7 @@ resource "cloudflare_dns_record" "dns_record_v6" {
 
 resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/inventory.tpl", {
+    label = var.label
     instances = {
       for name, instance in vultr_instance.server_instance : name => {
         hostname = instance.hostname
